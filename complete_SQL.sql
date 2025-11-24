@@ -1,6 +1,7 @@
 
 --➖WELCOME TO MY FILE!🥰YOU CAN VISIT🔍IT IF YOU WANT👀BUT BUT DON'T EDIT ANYTHING🧮👊🤜🤛➖
 -- this is new comment 
+-- this is second new comment
 create database db_1;
 
 create table table_1(
