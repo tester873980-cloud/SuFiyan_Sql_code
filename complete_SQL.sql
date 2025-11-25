@@ -1092,3 +1092,168 @@ select students.student_name, courses.course_name
 from students
 left join courses  on students.course_id = courses.course_id
 where courses.duration_months > 4;
+
+--              CASE ---
+
+CREATE TABLE table_10 (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    department VARCHAR(50),
+    salary INT,
+    performance_score INT
+);
+
+INSERT INTO table_10 (emp_id, emp_name, department, salary, performance_score)
+VALUES
+(1, 'Alice', 'HR', 52000, 88),
+(2, 'Bob', 'Finance', 68000, 72),
+(3, 'Charlie', 'IT', 75000, 95),
+(4, 'Diana', 'IT', 72000, 60),
+(5, 'Ethan', 'Finance', 51000, 40),
+(6, 'Fiona', 'HR', 48000, 55);
+
+select * from table_10;
+
+/* 1. Label employees as “Pass” or “Fail” based on performance_score.
+
+Pass = score ≥ 60
+
+Fail = score < 60*/
+
+select emp_name,performance_score,
+case
+	when performance_score >= 60 then 'PASS'
+	when performance_score < 60 then 'fail'
+	else 'not found'
+	end as Result
+from table_10;
+
+/* 🟡 Medium Level
+2. Create a salary category using CASE:
+
+High = salary ≥ 70,000
+
+Medium = 50,000–69,999
+
+Low = < 50,000*/
+select emp_name,salary,
+case
+	when salary >=70000 then 'high'
+	when salary between 50000 and 69999 then 'medium'
+	when salary < 50000 then 'low'
+	end as salary_track
+from table_10;
+
+/*🔴 Hard Level
+3. Show a performance rating with multiple CASE conditions:
+
+Excellent = 90–100
+Good = 75–89
+Average = 60–74
+Poor = 40–59
+Critical = < 40
+Also return a new bonus value based on rating:
+Excellent → 20% of salary
+Good → 10%
+Average → 5%
+Poor → 2%
+Critical → 0%*/
+
+select emp_name,performance_score as ps,
+case
+	when performance_score between 90 and 100 then 'excellent'
+	when performance_score between 75 and 89 then 'good'
+	when performance_score between 60 and 74 then 'average'
+	when performance_score between 40 and 59 then 'poor'
+	when performance_score <= 40 then 'critical'
+	end as performance_rating,
+case
+	when performance_score between 90 and 100 then salary *0.20
+	when performance_score between 75 and 89 then salary *0.10
+	when performance_score between 60 and 74 then salary *0.5
+	when performance_score between 40 and 59 then salary *0.2
+	when performance_SCORE < 40 then 0
+	end as bonus_amount
+from table_10;
+
+select emp_name,department,
+case department
+	when 'HR' then 'Support Team'
+	when 'Finance' then 'Money Team'
+	when 'IT' then 'Technical Team'
+	else 'Other Department'
+	end as dept_group
+from table_10;
+
+
+select emp_name,department
+from table_10
+order by 
+	case department
+		when 'IT' then 1
+		when 'HR' then 2
+		when 'Finance' then 3
+		else 4
+	end;
+
+-- CASE + ORDER BY + ASC/DESC Mix
+select emp_name,performance_score,salary
+from table_10
+order by
+	case
+		when performance_score >= 90 then 1
+		when performance_score >=75 then 2
+		when performance_score >=60 then 2
+		else 4
+	end asc,
+	salary desc;
+
+-- CASE with Multiple Conditions in ORDER BY
+SELECT emp_name, department, salary
+FROM table_10
+ORDER BY
+    CASE 
+        WHEN department = 'IT' AND salary > 70000 THEN 1
+        WHEN department = 'HR' THEN 2
+        ELSE 3
+    END;
+
+-- CASE based Alphabet Range Sorting
+-- Sort names starting with A–M first, N–Z later
+SELECT emp_name
+FROM table_10
+ORDER BY 
+    CASE
+        WHEN emp_name LIKE '[A-M]%' THEN 1
+        ELSE 2
+    END,
+    emp_name;
+	
+-- CASE for Null Handling in Sorting
+select emp_name
+from table_10
+order by
+	case
+		when emp_name is null then 2
+		else 1
+	end,
+	emp_name;
+
+insert into table_10 (emp_id,emp_name,department,salary,performance_score)
+values(7,null,null,null,null);
+
+-- . Reverse Custom Sorting (DESC logic)
+select emp_name,department
+from table_10
+order by
+	case
+		when department='HR' then 1
+		when department='IT' then 2
+		when department='Finance' then 3
+		end desc;
+
+
+
+
+
+
