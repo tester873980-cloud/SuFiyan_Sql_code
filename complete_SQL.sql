@@ -1253,7 +1253,39 @@ order by
 		end desc;
 
 
+------   case inside group by-----
+select
+	case
+		when salary >= 70000 then 'high salary'
+		when salary between 50000 and 699999 then 'medium salary'
+		else 'low salary'
+	end as salary_bucket,
+	count(*) as total_employees
+from table_10
+group by 
+	case 
+		when salary >= 70000 then 'high salary'
+		when salary between 50000 and 699999 then 'medium salary'
+		else 'low salary'
+		end;
 
+-- Example: Group by Performance Category
+select 
+	case
+		when performance_score >=90 then 'excellent'
+		when performance_score >=75 then 'good'
+		when performance_score >=60 then 'average'
+		else 'poor'
+	end as performance_rating,
+	count(*) as total_employees
+from table_10
+group by
+	case 
+		when performance_score >=90 then 'excellent'
+		when performance_score >=75 then 'good'
+		when performance_score >=60 then 'average'
+		else 'poor'
+		end;
 
 
 
